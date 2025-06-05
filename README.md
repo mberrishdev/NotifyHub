@@ -174,11 +174,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email support@notifyhub.com or open an issue in the repository.
+For support, email mikheil.berishvili@outlook.com or open an issue in the repository.
 
 ---
 
-Made with ❤️ by [Your Name]
+Made with ❤️ by [Mikheil Berishvili]
 
 ## Group-Based Notifications
 
