@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NotifyHub - Real-time Notifications</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#6366f1">
+    <meta name="msapplication-TileColor" content="#6366f1">
+    <meta name="theme-color" content="#6366f1">
+    
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500&family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="logo-title">
+        <span class="logo"><i class="fa-solid fa-bolt"></i></span>
+        <span class="title"
+          >NotifyHub <span class="subtitle">Test Client</span></span
+        >
+      </div>
+    </header>
+    <main class="container">
+      <section class="card auth-card">
+        <h2><i class="fa-solid fa-user-lock"></i> Authentication</h2>
+        <form class="form-row" onsubmit="return false;">
+          <div class="form-group floating-label">
+            <input
+              type="text"
+              id="userId"
+              placeholder=" "
+              autocomplete="username"
+            />
+            <label for="userId"><i class="fa-solid fa-user"></i> User ID</label>
+          </div>
+          <div class="form-group floating-label">
+            <input type="text" id="role" placeholder=" " autocomplete="off" />
+            <label for="role"
+              ><i class="fa-solid fa-user-shield"></i> Role</label
+            >
+          </div>
+          <button type="button" id="getToken" class="btn-primary">
+            <i class="fa-solid fa-key"></i> Get Token
+          </button>
+          <span id="tokenStatus" class="status-text"></span>
+        </form>
+      </section>
+      <section class="card connection-card">
+        <h2><i class="fa-solid fa-link"></i> Connection</h2>
+        <div class="connection-status">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="status" class="status-text disconnected">Disconnected</span>
+          <button type="button" id="connect" class="btn-primary">
+            <i class="fa-solid fa-plug"></i> Connect
+          </button>
+          <button type="button" id="disconnect" class="btn-secondary">
+            <i class="fa-solid fa-xmark"></i> Disconnect
+          </button>
+        </div>
+        <div class="form-group floating-label">
+          <input type="text" id="connectGroups" placeholder=" " />
+          <label for="connectGroups"><i class="fa-solid fa-users"></i> Groups to Join (comma-separated)</label>
+        </div>
+      </section>
+      <section class="card notification-form-card">
+        <h2><i class="fa-solid fa-paper-plane"></i> Send Test Event</h2>
+        <form class="form-row" onsubmit="return false;">
+          <div class="form-group floating-label">
+            <input type="text" id="eventType" placeholder=" " />
+            <label for="eventType"
+              ><i class="fa-solid fa-tag"></i> Event Type</label
+            >
+          </div>
+          <div class="form-group floating-label">
+            <textarea id="eventData" placeholder=" "></textarea>
+            <label for="eventData"
+              ><i class="fa-solid fa-database"></i> Event Data (JSON)</label
+            >
+          </div>
+          <div class="form-group floating-label">
+            <input type="text" id="targetGroups" placeholder=" " />
+            <label for="targetGroups"><i class="fa-solid fa-users"></i> Target Groups (comma-separated)</label>
+          </div>
+          <div class="form-group checkbox">
+            <label>
+              <input type="checkbox" id="saveToHistory" checked>
+              Save to History
+            </label>
+          </div>
+          <button type="button" id="sendEvent" class="btn-primary">
+            <i class="fa-solid fa-paper-plane"></i> Send Event
+          </button>
+        </form>
+      </section>
+      <section class="card notifications-card">
+        <h2><i class="fa-solid fa-bell"></i> Notifications</h2>
+        <div id="notificationList" class="notification-list"></div>
+      </section>
+      <section class="card history-card">
+        <h2><i class="fa-solid fa-clock-rotate-left"></i> Event History</h2>
+        <div class="history-controls">
+          <button type="button" id="loadHistory" class="btn-secondary">
+            <i class="fa-solid fa-rotate"></i> Load History
+          </button>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
+ 
