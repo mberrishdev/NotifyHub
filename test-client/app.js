@@ -11,7 +11,9 @@ const statusElement = document.getElementById('status');
 const connectButton = document.getElementById('connect');
 const disconnectButton = document.getElementById('disconnect');
 const eventTypeInput = document.getElementById('eventType');
-const eventDataInput = document.getElementById('eventData');
+const eventDataFields = document.getElementById('eventDataFields');
+const addFieldButton = document.getElementById('addField');
+const jsonPreview = document.getElementById('jsonPreview');
 const sendEventButton = document.getElementById('sendEvent');
 const notificationList = document.getElementById('notificationList');
 const filterFieldInput = document.getElementById('filterField');
@@ -181,19 +183,92 @@ async function disconnect() {
     }
 }
 
+// Add new field to event data form
+function addEventDataField() {
+    const row = document.createElement('div');
+    row.className = 'event-data-row';
+    row.innerHTML = `
+        <input type="text" class="key-input" placeholder="Key" />
+        <input type="text" class="value-input" placeholder="Value" />
+        <button type="button" class="btn-icon remove-field" title="Remove field">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    `;
+    
+    // Add remove field handler
+    row.querySelector('.remove-field').addEventListener('click', () => {
+        row.remove();
+        updateJsonPreview();
+    });
+    
+    // Add input change handlers
+    row.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', updateJsonPreview);
+    });
+    
+    eventDataFields.appendChild(row);
+}
+
+// Update JSON preview
+function updateJsonPreview() {
+    const data = {};
+    eventDataFields.querySelectorAll('.event-data-row').forEach(row => {
+        const key = row.querySelector('.key-input').value.trim();
+        const value = row.querySelector('.value-input').value.trim();
+        if (key) {
+            // Try to parse value as JSON if it looks like JSON
+            try {
+                if (value.startsWith('{') || value.startsWith('[')) {
+                    data[key] = JSON.parse(value);
+                } else if (value === 'true') {
+                    data[key] = true;
+                } else if (value === 'false') {
+                    data[key] = false;
+                } else if (!isNaN(value)) {
+                    data[key] = Number(value);
+                } else {
+                    data[key] = value;
+                }
+            } catch {
+                data[key] = value;
+            }
+        }
+    });
+    
+    jsonPreview.textContent = JSON.stringify(data, null, 2);
+}
+
+// Get event data as JSON string
+function getEventData() {
+    const data = {};
+    eventDataFields.querySelectorAll('.event-data-row').forEach(row => {
+        const key = row.querySelector('.key-input').value.trim();
+        const value = row.querySelector('.value-input').value.trim();
+        if (key) {
+            try {
+                if (value.startsWith('{') || value.startsWith('[')) {
+                    data[key] = JSON.parse(value);
+                } else if (value === 'true') {
+                    data[key] = true;
+                } else if (value === 'false') {
+                    data[key] = false;
+                } else if (!isNaN(value)) {
+                    data[key] = Number(value);
+                } else {
+                    data[key] = value;
+                }
+            } catch {
+                data[key] = value;
+            }
+        }
+    });
+    return JSON.stringify(data);
+}
+
 // Send test event
 async function sendEvent() {
     const eventType = eventTypeInput.value.trim();
-    let eventData;
-    
-    try {
-        // Validate JSON but keep it as a string
-        JSON.parse(eventDataInput.value); // This validates the JSON
-        eventData = eventDataInput.value; // Use the raw string
-    } catch (err) {
-        alert('Invalid JSON data');
-        return;
-    }
+    const eventData = getEventData();
 
     // Get target groups from input
     const targetGroupsInput = document.getElementById('targetGroups');
@@ -318,6 +393,8 @@ connectButton.addEventListener('click', () => {
 disconnectButton.addEventListener('click', disconnect);
 sendEventButton.addEventListener('click', sendEvent);
 loadHistoryButton.addEventListener('click', loadHistory);
+addFieldButton.addEventListener('click', addEventDataField);
 
 // Initial setup
-connectButton.disabled = true; 
+connectButton.disabled = true;
+addEventDataField(); // Add initial field 

@@ -2,10 +2,5 @@
 
 namespace NotifyHub.Domain.Exceptions;
 
-public class CommandValidationException : DomainException
-{
-    public CommandValidationException(IEnumerable<CommandValidationError> messages) : base(
-        messages.Select(x => x.ErrorMessage))
-    {
-    }
-}
+public class CommandValidationException(IEnumerable<CommandValidationError> messages)
+    : DomainException(messages.Select(x => x.ErrorMessage));

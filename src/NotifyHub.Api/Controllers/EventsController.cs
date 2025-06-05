@@ -6,19 +6,12 @@ namespace NotifyHub.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EventsController : ControllerBase
+public class EventsController(INotificationService notificationService) : ControllerBase
 {
-    private readonly INotificationService _notificationService;
-
-    public EventsController(INotificationService notificationService)
-    {
-        _notificationService = notificationService;
-    }
-
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] Event @event)
     {
-        await _notificationService.ProcessEventAsync(@event);
+        await notificationService.ProcessEventAsync(@event);
         return Ok();
     }
 } 

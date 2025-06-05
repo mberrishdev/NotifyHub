@@ -5,19 +5,12 @@ namespace NotifyHub.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController(ITokenService tokenService) : ControllerBase
 {
-    private readonly ITokenService _tokenService;
-
-    public AuthController(ITokenService tokenService)
-    {
-        _tokenService = tokenService;
-    }
-
     [HttpPost("token")]
     public IActionResult GetToken([FromBody] TokenRequest request)
     {
-        var token = _tokenService.GenerateToken(request.UserId, request.Role);
+        var token = tokenService.GenerateToken(request.UserId, request.Role);
         return Ok(new { token });
     }
 }

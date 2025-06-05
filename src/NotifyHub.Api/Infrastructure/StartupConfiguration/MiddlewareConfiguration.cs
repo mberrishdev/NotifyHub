@@ -44,11 +44,9 @@ public static class MiddlewareConfiguration
         app.UseAuthentication();
         app.UseAuthorization();
         
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapHub<NotificationHub>("/notificationHub");
-        });
+        app.MapControllers();
+        
+        app.MapHub<NotificationHub>("/notificationHub");
         
         app.MapHealthChecks("/health", new HealthCheckOptions()
         {

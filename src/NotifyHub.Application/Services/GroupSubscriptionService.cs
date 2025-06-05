@@ -12,15 +12,13 @@ namespace NotifyHub.Application.Services;
 public class GroupSubscriptionService(IMemoryCache cache, ILogger<GroupSubscriptionService> logger)
     : IGroupSubscriptionService
 {
-    private readonly IMemoryCache _cache = cache;
     private const string SubscriptionsKey = "subscriptions";
     private const string UserGroupsKey = "user_groups_{0}";
     private const string GroupMembersKey = "group_members_{0}";
-    private const string ConnectionKey = "connection_{0}";
 
     private Dictionary<string, GroupSubscription>? GetSubscriptions()
     {
-        return _cache.GetOrCreate(SubscriptionsKey, entry =>
+        return cache.GetOrCreate(SubscriptionsKey, entry =>
         {
             entry.SlidingExpiration = TimeSpan.FromHours(24);
             return new Dictionary<string, GroupSubscription>();
@@ -29,7 +27,7 @@ public class GroupSubscriptionService(IMemoryCache cache, ILogger<GroupSubscript
 
     private void SaveSubscriptions(Dictionary<string, GroupSubscription>? subscriptions)
     {
-        _cache.Set(SubscriptionsKey, subscriptions, new MemoryCacheEntryOptions
+        cache.Set(SubscriptionsKey, subscriptions, new MemoryCacheEntryOptions
         {
             SlidingExpiration = TimeSpan.FromHours(24)
         });
@@ -55,7 +53,7 @@ public class GroupSubscriptionService(IMemoryCache cache, ILogger<GroupSubscript
 
         // Update user groups cache
         var userGroupsKey = string.Format(UserGroupsKey, userId);
-        _cache.Set(userGroupsKey, groups, new MemoryCacheEntryOptions
+        cache.Set(userGroupsKey, groups, new MemoryCacheEntryOptions
         {
             SlidingExpiration = TimeSpan.FromHours(24)
         });
@@ -64,13 +62,13 @@ public class GroupSubscriptionService(IMemoryCache cache, ILogger<GroupSubscript
         foreach (var group in groups)
         {
             var groupMembersKey = string.Format(GroupMembersKey, group);
-            var groupMembers = _cache.GetOrCreate(groupMembersKey, entry =>
+            var groupMembers = cache.GetOrCreate(groupMembersKey, entry =>
             {
                 entry.SlidingExpiration = TimeSpan.FromHours(24);
                 return new HashSet<string>();
             });
             groupMembers?.Add(connectionId);
-            _cache.Set(groupMembersKey, groupMembers, new MemoryCacheEntryOptions
+            cache.Set(groupMembersKey, groupMembers, new MemoryCacheEntryOptions
             {
                 SlidingExpiration = TimeSpan.FromHours(24)
             });
@@ -95,9 +93,9 @@ public class GroupSubscriptionService(IMemoryCache cache, ILogger<GroupSubscript
 
             // Update user groups cache
             var userGroupsKey = string.Format(UserGroupsKey, userId);
-            var userGroups = _cache.Get<List<string>>(userGroupsKey) ?? new List<string>();
+            var userGroups = cache.Get<List<string>>(userGroupsKey) ?? new List<string>();
             userGroups.RemoveAll(g => groups.Contains(g));
-            _cache.Set(userGroupsKey, userGroups, new MemoryCacheEntryOptions
+            cache.Set(userGroupsKey, userGroups, new MemoryCacheEntryOptions
             {
                 SlidingExpiration = TimeSpan.FromHours(24)
             });
@@ -106,11 +104,11 @@ public class GroupSubscriptionService(IMemoryCache cache, ILogger<GroupSubscript
             foreach (var group in groups)
             {
                 var groupMembersKey = string.Format(GroupMembersKey, group);
-                var groupMembers = _cache.Get<HashSet<string>>(groupMembersKey);
+                var groupMembers = cache.Get<HashSet<string>>(groupMembersKey);
                 if (groupMembers != null)
                 {
                     groupMembers.Remove(userId);
-                    _cache.Set(groupMembersKey, groupMembers, new MemoryCacheEntryOptions
+                    cache.Set(groupMembersKey, groupMembers, new MemoryCacheEntryOptions
                     {
                         SlidingExpiration = TimeSpan.FromHours(24)
                     });
@@ -142,9 +140,9 @@ public class GroupSubscriptionService(IMemoryCache cache, ILogger<GroupSubscript
 
             // Update user groups cache
             var userGroupsKey = string.Format(UserGroupsKey, userId);
-            var userGroups = _cache.Get<List<string>>(userGroupsKey) ?? new List<string>();
+            var userGroups = cache.Get<List<string>>(userGroupsKey) ?? new List<string>();
             userGroups.RemoveAll(g => groups.Contains(g));
-            _cache.Set(userGroupsKey, userGroups, new MemoryCacheEntryOptions
+            cache.Set(userGroupsKey, userGroups, new MemoryCacheEntryOptions
             {
                 SlidingExpiration = TimeSpan.FromHours(24)
             });
@@ -153,11 +151,11 @@ public class GroupSubscriptionService(IMemoryCache cache, ILogger<GroupSubscript
             foreach (var group in groups)
             {
                 var groupMembersKey = string.Format(GroupMembersKey, group);
-                var groupMembers = _cache.Get<HashSet<string>>(groupMembersKey);
+                var groupMembers = cache.Get<HashSet<string>>(groupMembersKey);
                 if (groupMembers != null)
                 {
                     groupMembers.Remove(userId);
-                    _cache.Set(groupMembersKey, groupMembers, new MemoryCacheEntryOptions
+                    cache.Set(groupMembersKey, groupMembers, new MemoryCacheEntryOptions
                     {
                         SlidingExpiration = TimeSpan.FromHours(24)
                     });
@@ -178,7 +176,7 @@ public class GroupSubscriptionService(IMemoryCache cache, ILogger<GroupSubscript
         }
 
         var groupMembersKey = string.Format(GroupMembersKey, group);
-        var groupMembers = _cache.Get<HashSet<string>>(groupMembersKey) ?? new HashSet<string>();
+        var groupMembers = cache.Get<HashSet<string>>(groupMembersKey) ?? new HashSet<string>();
         return Task.FromResult(groupMembers.ToList());
     }
 

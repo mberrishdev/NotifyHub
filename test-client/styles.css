@@ -280,6 +280,110 @@ body {
     box-shadow: var(--shadow-md);
 }
 
+/* Event Data Form */
+.event-data-form {
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.event-data-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.event-data-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.event-data-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.event-data-row input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    background: white;
+}
+
+.event-data-row input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.btn-icon {
+    padding: 0.5rem;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: all 0.2s;
+}
+
+.btn-icon:hover {
+    background: var(--border);
+    color: var(--error);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.json-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 0.25rem;
+    border: 1px solid var(--border);
+}
+
+.json-preview label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.json-preview pre {
+    margin: 0;
+    padding: 0.5rem;
+    background: var(--bg-primary);
+    border-radius: 0.25rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .event-data-row {
+        flex-direction: column;
+    }
+    
+    .event-data-row input {
+        width: 100%;
+    }
+    
+    .btn-icon {
+        align-self: flex-end;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .container {

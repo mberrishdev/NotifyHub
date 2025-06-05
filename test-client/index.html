@@ -93,11 +93,24 @@
               ><i class="fa-solid fa-tag"></i> Event Type</label
             >
           </div>
-          <div class="form-group floating-label">
-            <textarea id="eventData" placeholder=" "></textarea>
-            <label for="eventData"
-              ><i class="fa-solid fa-database"></i> Event Data (JSON)</label
-            >
+          <div class="form-group event-data-form">
+            <label><i class="fa-solid fa-database"></i> Event Data</label>
+            <div id="eventDataFields" class="event-data-fields">
+              <div class="event-data-row">
+                <input type="text" class="key-input" placeholder="Key" />
+                <input type="text" class="value-input" placeholder="Value" />
+                <button type="button" class="btn-icon remove-field" title="Remove field">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <button type="button" id="addField" class="btn-secondary btn-sm">
+              <i class="fa-solid fa-plus"></i> Add Field
+            </button>
+            <div class="json-preview">
+              <label>JSON Preview</label>
+              <pre id="jsonPreview">{}</pre>
+            </div>
           </div>
           <div class="form-group floating-label">
             <input type="text" id="targetGroups" placeholder=" " />
